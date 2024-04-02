@@ -3,8 +3,9 @@ const taskTitleInput = document.getElementById('taskTitle');
 const taskDetailsInput = document.getElementById('taskDetails');
 const addTaskButton = document.getElementById('addTask');
 
-let tasks = [];
+let tasks = []; // Initialize an empty array to store tasks
 
+// Function to load tasks from local storage (if available)
 function loadTasks() {
     const storedTasks = localStorage.getItem('tasks');
     if (storedTasks) {
@@ -13,17 +14,19 @@ function loadTasks() {
     }
 }
 
+// Function to save tasks to local storage
 function saveTasks() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
+// Function to add a task
 function addTask() {
     const taskTitle = taskTitleInput.value;
     const taskDetails = taskDetailsInput.value;
 
     if (taskTitle) {
         const newTask = { 
-            id: Date.now(),
+            id: Date.now(), // Unique ID for task
             title: taskTitle,
             details: taskDetails,
             isEditing: false
@@ -37,8 +40,9 @@ function addTask() {
     }
 }
 
+// Function to render (display) the tasks
 function renderTasks() {
-    taskList.innerHTML = '';
+    taskList.innerHTML = ''; // Clear existing tasks
 
     tasks.forEach(task => {
         const listItem = document.createElement('li');
