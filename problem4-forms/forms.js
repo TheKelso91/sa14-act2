@@ -2,49 +2,56 @@ const registrationForm = document.getElementById('registrationForm');
 const usernameInput = document.getElementById('username');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
+const usernameError = document.getElementById('usernameError');
+const emailError = document.getElementById('emailError');
+const passwordError = document.getElementById('passwordError');
 
-registrationForm.addEventListener('submit', (event) => {
+registrationForm.addEventListener('submit', function(event) {
     event.preventDefault();
+    validateForm();
+});
 
+function validateForm() {
+    clearErrors();
     let isValid = true;
 
-    // Username validation
-    if (usernameInput.value.trim().length < 6) {
-        displayError(usernameInput, 'Username must be at least 6 characters.');
+    // Validate username
+    if (usernameInput.value.trim() === '') {
+        usernameError.textContent = 'Username is required';
         isValid = false;
-    } else {
-        clearError(usernameInput);
+    } else if (usernameInput.value.length < 6) {
+        usernameError.textContent = 'Username must be at least 6 characters';
+        isValid = false;
     }
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email pattern
-    if (!emailRegex.test(emailInput.value)) {
-        displayError(emailInput, 'Please enter a valid email address.');
+    // Validate email
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailInput.value.trim() === '') {
+        emailError.textContent = 'Email is required';
         isValid = false;
-    } else {
-        clearError(emailInput);
+    } else if (!emailPattern.test(emailInput.value)) {
+        emailError.textContent = 'Invalid email format';
+        isValid = false;
     }
 
-    // Password validation
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/; // At least 8 chars, 1 uppercase, 1 digit
-    if (!passwordRegex.test(passwordInput.value)) {
-        displayError(passwordInput, 'Password must be at least 8 characters, contain one uppercase letter and one digit.');
+    // Validate password
+    const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (passwordInput.value.trim() === '') {
+        passwordError.textContent = 'Password is required';
         isValid = false;
-    } else {
-        clearError(passwordInput);
+    } else if (!passwordPattern.test(passwordInput.value)) {
+        passwordError.textContent = 'Password must be at least 8 characters long and contain at least one capital letter and one number';
+        isValid = false;
     }
 
     if (isValid) {
-        alert('Registration Successful!');
+        alert('Registration successful!');
+        registrationForm.reset();
     }
-});
-
-function displayError(inputElement, message) {
-    const errorSpan = inputElement.nextElementSibling;
-    errorSpan.textContent = message;
 }
 
-function clearError(inputElement) {
-    const errorSpan = inputElement.nextElementSibling;
-    errorSpan.textContent = '';
+function clearErrors() {
+    usernameError.textContent = '';
+    emailError.textContent = '';
+    passwordError.textContent = '';
 }
